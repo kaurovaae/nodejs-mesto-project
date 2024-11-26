@@ -26,19 +26,15 @@ app.use('/cards', cards);
 
 // здесь обрабатываем все ошибки
 app.use((err: Error & { statusCode: number }, req: Request, res: Response, next: NextFunction) => {
-  if (err.name === 'NotFoundError' || err.name === 'BadRequestError') {
-    next(err);
-  } else {
-    const { statusCode = 500, message } = err;
+  const { statusCode = 500, message } = err;
 
-    res
-      .status(statusCode)
-      .send({
-        message: statusCode === 500
-          ? 'Произошла ошибка'
-          : message
-      });
-  }
+  res
+    .status(statusCode)
+    .send({
+      message: statusCode === 500
+        ? 'Произошла ошибка'
+        : message
+    });
 });
 
 app.listen(PORT, () => {

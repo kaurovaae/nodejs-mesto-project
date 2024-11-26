@@ -11,7 +11,7 @@ export const getUsers = (req: Request, res: Response, next: NextFunction) => {
 export const getUser = (req: Request, res: Response, next: NextFunction) => {
   const { userId } = req.params;
 
-  User.find({ _id: userId })
+  User.findOne({ _id: userId })
     .then(user => {
       if (!user) {
         throw new NotFoundError('Запрашиваемый пользователь не найден');
