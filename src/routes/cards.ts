@@ -7,12 +7,12 @@ import {
   dislikeCard,
 } from '../controllers/cards';
 
-const router = Router();
+const cardsRouter = Router();
 
-router.put('/:cardId/likes', likeCard); // PUT /cards/:cardId/likes — поставить лайк карточке
-router.delete('/:cardId/likes', dislikeCard); // DELETE /cards/:cardId/likes — убрать лайк с карточки
-router.delete('/:cardId', deleteCard); // DELETE /cards/:cardId — удаляет карточку по идентификатору
-router.get('/', getCards); // GET /cards — возвращает все карточки
-router.post('/', createCard); // POST /cards — создаёт карточку
+cardsRouter.put('/:cardId/likes', likeCard); // поставить лайк карточке
+cardsRouter.delete('/:cardId/likes', dislikeCard); // убрать лайк с карточки
+cardsRouter.delete('/:cardId', deleteCard); // удалить карточку по идентификатору
+cardsRouter.get('/', getCards); // вернуть все карточки
+cardsRouter.post('/', createCard); // создать карточку
 
-export default router;
+export default cardsRouter;

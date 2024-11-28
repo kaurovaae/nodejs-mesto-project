@@ -18,7 +18,7 @@ export const getUser = (req: Request, res: Response, next: NextFunction) => {
         throw new NotFoundError('Запрашиваемый пользователь не найден');
       }
 
-      res.send({ data: user });
+      res.status(201).send({ data: user });
     })
     .catch(next);
 };

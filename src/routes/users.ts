@@ -7,12 +7,12 @@ import {
   updateUserAvatar,
 } from '../controllers/users';
 
-const router = Router();
+const usersRouter = Router();
 
-router.patch('/me/avatar', updateUserAvatar); // PATCH /users/me/avatar — обновляет аватар
-router.patch('/me', updateUser); // PATCH /users/me — обновляет профиль
-router.get('/:userId', getUser); // GET /users/:userId - возвращает пользователя по _id
-router.get('/', getUsers); // GET /users — возвращает всех пользователей
-router.post('/', createUser); // POST /users — создаёт пользователя
+usersRouter.patch('/me/avatar', updateUserAvatar); // обновить аватар
+usersRouter.patch('/me', updateUser); // обновить профиль
+usersRouter.get('/:userId', getUser); // вернуть пользователя по _id
+usersRouter.get('/', getUsers); // вернуть всех пользователей
+usersRouter.post('/', createUser); // создать пользователя
 
-export default router;
+export default usersRouter;
