@@ -28,6 +28,7 @@ export const createCard = (req: Request, res: Response, next: NextFunction) => {
 
   // @ts-ignore
   const userId = req.user._id;
+
   Card.create({ name, link, owner: userId })
     .then((card) => res.send({ data: card }))
     .catch((err) => {
@@ -42,6 +43,7 @@ export const createCard = (req: Request, res: Response, next: NextFunction) => {
 export const likeCard = (req: Request, res: Response, next: NextFunction) => {
   // @ts-ignore
   const userId = req.user._id;
+
   Card.findByIdAndUpdate(
     req.params.cardId,
     { $addToSet: { likes: userId } }, // добавить _id в массив, если его там нет
