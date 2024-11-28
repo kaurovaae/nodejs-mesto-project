@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 import users from './routes/users';
 import cards from './routes/cards';
 
-const { PORT = 3000, BASE_PATH = '/' } = process.env;
+const { PORT = 3000 } = process.env;
 
 const app = express();
 
@@ -15,7 +15,7 @@ app.use(express.json());
 app.use((req: Request, res: Response, next: NextFunction) => {
   // @ts-ignore
   req.user = {
-    _id: '67434b984bc46eac922a7bf7',
+    _id: '674844dc563eee3241f7ffe6',
   };
 
   next();
@@ -38,5 +38,5 @@ app.use((err: Error & { statusCode: number }, req: Request, res: Response, next:
 });
 
 app.listen(PORT, () => {
-  console.log(`Listening on ${PORT}. Base path is: ${BASE_PATH}`);
+  console.log(`App listening on port ${PORT}`);
 });

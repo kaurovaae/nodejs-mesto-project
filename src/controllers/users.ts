@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import User from '../models/user';
 import NotFoundError from '../errors/not-found-err';
+import BadRequestError from '../errors/bad-request-err';
 
 export const getUsers = (req: Request, res: Response, next: NextFunction) => {
   User.find({})
@@ -27,7 +28,13 @@ export const createUser = (req: Request, res: Response, next: NextFunction) => {
 
   User.create({ name, about, avatar })
     .then((user) => res.send({ data: user }))
-    .catch(next);
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        next(new BadRequestError('Переданы некорректные данные при создании пользователя'));
+      } else {
+        next(err);
+      }
+    });
 };
 
 export const updateUser = (req: Request, res: Response, next: NextFunction) => {
@@ -41,8 +48,20 @@ export const updateUser = (req: Request, res: Response, next: NextFunction) => {
     { name, about, avatar },
     { new: true },
   )
-    .then((user) => res.send({ data: user }))
-    .catch(next);
+    .then((user) => {
+      if (!user) {
+        throw new NotFoundError('Запрашиваемый пользователь не найден');
+      }
+
+      res.send({ data: user });
+    })
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        next(new BadRequestError('Переданы некорректные данные при обновлении пользователя'));
+      } else {
+        next(err);
+      }
+    });
 };
 
 export const updateUserAvatar = (req: Request, res: Response, next: NextFunction) => {
@@ -56,6 +75,18 @@ export const updateUserAvatar = (req: Request, res: Response, next: NextFunction
     { avatar },
     { new: true },
   )
-    .then((user) => res.send({ data: user }))
-    .catch(next);
+    .then((user) => {
+      if (!user) {
+        throw new NotFoundError('Запрашиваемый пользователь не найден');
+      }
+
+      res.send({ data: user });
+    })
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        next(new BadRequestError('Переданы некорректные данные при обновлении пользователя'));
+      } else {
+        next(err);
+      }
+    });
 };
