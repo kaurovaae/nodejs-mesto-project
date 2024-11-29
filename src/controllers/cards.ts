@@ -30,7 +30,7 @@ export const createCard = (req: Request, res: Response, next: NextFunction) => {
   const userId = req.user._id;
 
   Card.create({ name, link, owner: userId })
-    .then((card) => res.send({ data: card }))
+    .then((card) => res.status(201).send({ data: card }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
         next(new BadRequestError('Переданы некорректные данные при создании карточки'));

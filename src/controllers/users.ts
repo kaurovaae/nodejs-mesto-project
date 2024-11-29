@@ -18,7 +18,7 @@ export const getUser = (req: Request, res: Response, next: NextFunction) => {
         throw new NotFoundError('Запрашиваемый пользователь не найден');
       }
 
-      res.status(201).send({ data: user });
+      res.send({ data: user });
     })
     .catch(next);
 };
@@ -27,7 +27,7 @@ export const createUser = (req: Request, res: Response, next: NextFunction) => {
   const { name, about, avatar } = req.body;
 
   User.create({ name, about, avatar })
-    .then((user) => res.send({ data: user }))
+    .then((user) => res.status(201).send({ data: user }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
         next(new BadRequestError('Переданы некорректные данные при создании пользователя'));
