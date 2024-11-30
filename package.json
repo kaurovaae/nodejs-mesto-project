@@ -13,8 +13,10 @@
   "author": "Annie",
   "license": "ISC",
   "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
     "@types/express": "^5.0.0",
     "@types/node": "^22.9.3",
+    "@types/validator": "^13.12.2",
     "@typescript-eslint/eslint-plugin": "^8.16.0",
     "@typescript-eslint/parser": "^8.16.0",
     "eslint": "^8.57.1",
@@ -25,7 +27,9 @@
     "typescript": "^5.7.2"
   },
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "express": "^4.21.1",
-    "mongoose": "^8.8.2"
+    "mongoose": "^8.8.2",
+    "validator": "^13.12.0"
   }
 }
