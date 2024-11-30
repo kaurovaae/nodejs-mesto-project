@@ -1,5 +1,6 @@
 import bcrypt from 'bcryptjs';
 import { NextFunction, Request, Response } from 'express';
+import jwt from 'jsonwebtoken';
 import User from '../models/user';
 import NotFoundError from '../errors/not-found-err';
 import BadRequestError from '../errors/bad-request-err';
@@ -104,4 +105,21 @@ export const updateUserAvatar = (req: Request, res: Response, next: NextFunction
         next(err);
       }
     });
+};
+
+export const login = (req: Request, res: Response, next: NextFunction) => {
+  const { email, password } = req.body;
+
+  User.findUserByCredentials(email, password)
+    .then((user) => {
+      const token = jwt.sign({ _id: user._id }, '912c3782f50492ddcb2b9d33191');
+
+      res
+        .cookie('jwt', token, {
+          maxAge: 3600000,
+          httpOnly: true,
+        })
+        .end();
+    })
+    .catch(next);
 };

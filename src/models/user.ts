@@ -1,5 +1,7 @@
+import bcrypt from 'bcryptjs';
 import mongoose from 'mongoose';
 import validator from 'validator';
+import UnauthorizedError from '../errors/unauthorized-err';
 
 interface IUser {
   name: string;
@@ -9,7 +11,16 @@ interface IUser {
   password: string;
 }
 
-const userSchema = new mongoose.Schema<IUser>({
+interface IUserMethods {}
+
+interface IUserModel extends mongoose.Model<IUser, {}, IUserMethods> {
+  findUserByCredentials: (
+    email: string,
+    password: string
+  ) => Promise<mongoose.HydratedDocument<IUser, IUserMethods>>,
+}
+
+const userSchema = new mongoose.Schema<IUser, IUserModel, IUserMethods>({
   name: {
     type: String,
     minlength: [2, 'Минимальная длина поля "name" — 2'],
@@ -44,4 +55,17 @@ const userSchema = new mongoose.Schema<IUser>({
   },
 });
 
-export default mongoose.model<IUser>('user', userSchema);
+userSchema.statics
+  .findUserByCredentials = async function findUserByCredentials(email: string, password: string) {
+    const user = await this.findOne({ email })
+      .select('+password')
+      .orFail(() => new UnauthorizedError('Неправильные почта или пароль'));
+
+    const passwordMatch = await bcrypt.compare(password, user.password);
+    if (!passwordMatch) {
+      return Promise.reject(new UnauthorizedError('Неправильные почта или пароль'));
+    }
+    return user;
+  };
+
+export default mongoose.model<IUser, IUserModel>('user', userSchema);
