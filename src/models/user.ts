@@ -44,7 +44,6 @@ const userSchema = new mongoose.Schema<IUser, IUserModel, IUserMethods>({
   password: {
     type: String,
     required: [true, 'Поле "password" должно быть заполнено'],
-    minlength: 8,
     select: false,
   },
 });
