@@ -24,9 +24,11 @@ export const deleteCard = async (req: Request, res: Response, next: NextFunction
       .findById(cardId)
       .orFail(() => new NotFoundError('Запрашиваемая карточка не найдена'));
 
-    if (card.owner !== userId) {
+    if (card.owner.toString() !== userId) {
       return next(new ForbiddenError('Запрашиваемая карточка не найдена'));
     }
+
+    await card.deleteOne();
 
     return res.send({ data: { message: 'Карточка успешно удалена' } });
   } catch (err) {
