@@ -26,6 +26,20 @@ export const getUser = async (req: Request, res: Response, next: NextFunction) =
   }
 };
 
+export const getUserInfo = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    // @ts-ignore
+    const userId = req.user._id;
+    const user = await User
+      .findById(userId)
+      .orFail(() => new NotFoundError('Запрашиваемый пользователь не найден'));
+
+    return res.send({ data: user });
+  } catch (err) {
+    return next(err);
+  }
+};
+
 export const updateUser = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { name, about, avatar } = req.body;
