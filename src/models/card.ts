@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { LINK_REGEX } from '../consts';
 
 interface ICard {
   name: string;
@@ -18,6 +19,12 @@ const cardSchema = new mongoose.Schema<ICard>({
   link: {
     type: String,
     required: [true, 'Поле "link" должно быть заполнено'],
+    validate: {
+      validator(value: string): boolean {
+        return LINK_REGEX.test(value);
+      },
+      message: 'Некорректное значение поля "link"',
+    },
   },
   owner: {
     type: mongoose.Schema.Types.ObjectId,
