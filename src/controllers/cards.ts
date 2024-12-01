@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { Error as MongooseError } from 'mongoose';
 import Card from '../models/card';
+import { STATUS_CODE } from '../consts';
 import NotFoundError from '../errors/not-found-err';
 import BadRequestError from '../errors/bad-request-err';
 
@@ -35,7 +36,7 @@ export const createCard = async (req: Request, res: Response, next: NextFunction
     const userId = req.user._id;
     const card = await Card.create({ name, link, owner: userId });
 
-    return res.status(201).send({ data: card });
+    return res.status(STATUS_CODE.CREATED).send({ data: card });
   } catch (err) {
     if (err instanceof MongooseError.ValidatorError) {
       return next(new BadRequestError('Переданы некорректные данные при создании карточки'));

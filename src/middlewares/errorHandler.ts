@@ -4,6 +4,7 @@ import {
   NextFunction,
   ErrorRequestHandler,
 } from 'express';
+import { STATUS_CODE } from '../consts';
 
 const errorHandler: ErrorRequestHandler = (
   err: Error & { statusCode: number },
@@ -11,12 +12,12 @@ const errorHandler: ErrorRequestHandler = (
   res: Response,
   _next: NextFunction,
 ) => {
-  const { statusCode = 500, message } = err;
+  const { statusCode = STATUS_CODE.ERROR, message } = err;
 
   res
     .status(statusCode)
     .send({
-      message: statusCode === 500
+      message: statusCode === STATUS_CODE.ERROR
         ? 'Произошла ошибка'
         : message,
     });

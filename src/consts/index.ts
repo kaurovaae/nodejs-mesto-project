@@ -1,0 +1,10 @@
+export const AUTH_SALT = '912c3782f50492ddcb2b9d33191';
+
+export const STATUS_CODE = {
+  ERROR: 500,
+  BAD_REQUEST: 400,
+  UNAUTHORIZED: 401,
+  NOT_FOUND: 404,
+  CREATED: 201,
+  OK: 200,
+};

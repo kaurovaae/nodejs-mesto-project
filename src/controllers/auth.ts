@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 import { NextFunction, Request, Response } from 'express';
 import { Error as MongooseError } from 'mongoose';
 import User from '../models/user';
+import { AUTH_SALT, STATUS_CODE } from '../consts';
 import BadRequestError from '../errors/bad-request-err';
 
 export const login = async (req: Request, res: Response, next: NextFunction) => {
@@ -10,7 +11,7 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
 
   try {
     const user = await User.findUserByCredentials(email, password);
-    const token = jwt.sign({ _id: user._id }, '912c3782f50492ddcb2b9d33191');
+    const token = jwt.sign({ _id: user._id }, AUTH_SALT);
     return res
       .cookie('jwt', token, {
         maxAge: 3600000,
@@ -41,7 +42,7 @@ export const createUser = async (req: Request, res: Response, next: NextFunction
       password: hash,
     });
 
-    return res.status(201).send({ data: user });
+    return res.status(STATUS_CODE.CREATED).send({ data: user });
   } catch (err) {
     if (err instanceof MongooseError.ValidatorError) {
       return next(new BadRequestError('Переданы некорректные данные при создании пользователя'));
