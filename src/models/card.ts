@@ -34,6 +34,9 @@ const cardSchema = new mongoose.Schema<ICard>({
     type: Date,
     default: new Date(),
   },
+}, {
+  versionKey: false,
+  timestamps: true,
 });
 
 export default mongoose.model<ICard>('card', cardSchema);

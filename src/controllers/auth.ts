@@ -3,8 +3,9 @@ import jwt from 'jsonwebtoken';
 import { NextFunction, Request, Response } from 'express';
 import { Error as MongooseError } from 'mongoose';
 import User from '../models/user';
-import { STATUS_CODE, DEV_JWT_SECRET } from '../consts';
+import { STATUS_CODE, DEV_JWT_SECRET, ALREADY_EXISTS_CODE } from '../consts';
 import BadRequestError from '../errors/bad-request-err';
+import ConflictError from '../errors/conflict-err';
 
 export const login = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
   try {
@@ -47,8 +48,11 @@ export const createUser = async (req: Request, res: Response, next: NextFunction
       password: hash,
     });
 
-    return res.status(STATUS_CODE.CREATED).send({ data: user });
+    return res.status(STATUS_CODE.CREATED).send({ data: user.save() });
   } catch (err) {
+    if (err instanceof Error && err.message.includes(ALREADY_EXISTS_CODE)) {
+      return next(new ConflictError('Пользователь с таким email уже существует'));
+    }
     if (err instanceof MongooseError.ValidatorError) {
       return next(new BadRequestError('Переданы некорректные данные при создании пользователя'));
     }

@@ -53,6 +53,9 @@ const userSchema = new mongoose.Schema<IUser, IUserModel, IUserMethods>({
     required: [true, 'Поле "password" должно быть заполнено'],
     select: false,
   },
+}, {
+  versionKey: false,
+  timestamps: true,
 });
 
 userSchema.statics

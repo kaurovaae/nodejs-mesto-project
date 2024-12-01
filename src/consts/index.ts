@@ -10,3 +10,5 @@ export const STATUS_CODE = {
   CONFLICT: 409,
   INTERNAL_ERROR: 500,
 };
+
+export const ALREADY_EXISTS_CODE = 'E11000';
