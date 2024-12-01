@@ -1,4 +1,5 @@
 import express from 'express';
+import rateLimit from 'express-rate-limit';
 import { errors } from 'celebrate';
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
@@ -12,6 +13,13 @@ dotenv.config();
 const { PORT = 3000 } = process.env;
 
 const app = express();
+
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // за 15 минут
+  max: 100, // можно совершить максимум 100 запросов с одного IP
+});
+
+app.use(limiter);
 
 mongoose.connect('mongodb://localhost:27017/mestodb');
 
