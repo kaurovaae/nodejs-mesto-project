@@ -12,7 +12,9 @@ interface IUser {
   password: string;
 }
 
-interface IUserMethods {}
+interface IUserMethods {
+  toJSON(): string;
+}
 
 interface IUserModel extends mongoose.Model<IUser, {}, IUserMethods> {
   findUserByCredentials: (
@@ -63,6 +65,15 @@ const userSchema = new mongoose.Schema<IUser, IUserModel, IUserMethods>({
 }, {
   versionKey: false,
   timestamps: true,
+  toJSON: {
+    virtuals: true,
+    transform: (_doc, record) => {
+      // select: false не работает в случае создания сущности
+      // eslint-disable-next-line no-param-reassign
+      delete record.password;
+      return record;
+    },
+  },
 });
 
 userSchema.statics

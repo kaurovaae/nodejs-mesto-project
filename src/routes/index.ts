@@ -13,8 +13,6 @@ router.use(auth);
 router.use('/users', usersRouter);
 router.use('/cards', cardsRouter);
 
-router.use('*', (_req: Request, _res: Response, next: NextFunction) => {
-  return next(new NotFoundError('Запрашиваемый ресурс не найден'));
-});
+router.use('*', (_req: Request, _res: Response, next: NextFunction) => next(new NotFoundError('Запрашиваемый ресурс не найден')));
 
 export default router;
