@@ -2,6 +2,7 @@ import bcrypt from 'bcryptjs';
 import mongoose from 'mongoose';
 import validator from 'validator';
 import UnauthorizedError from '../errors/unauthorized-err';
+import { LINK_REGEX } from '../consts';
 
 interface IUser {
   name: string;
@@ -36,13 +37,19 @@ const userSchema = new mongoose.Schema<IUser, IUserModel, IUserMethods>({
   avatar: {
     type: String,
     default: 'https://pictures.s3.yandex.net/resources/jacques-cousteau_1604399756.png',
+    validate: {
+      validator(value: string): boolean {
+        return LINK_REGEX.test(value);
+      },
+      message: 'Некорректное значение поля "avatar"',
+    },
   },
   email: {
     type: String,
     required: [true, 'Поле "email" должно быть заполнено'],
     unique: true,
     validate: {
-      validator(email: string) {
+      validator(email: string): boolean {
         return validator.isEmail(email);
       },
       message: 'Некорректное значение поля "email"',
