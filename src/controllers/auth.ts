@@ -48,7 +48,7 @@ export const createUser = async (req: Request, res: Response, next: NextFunction
       password: hash,
     });
 
-    return res.status(STATUS_CODE.CREATED).send({ data: user.save() });
+    return res.status(STATUS_CODE.CREATED).send({ data: user });
   } catch (err) {
     if (err instanceof Error && err.message.includes(ALREADY_EXISTS_CODE)) {
       return next(new ConflictError('Пользователь с таким email уже существует'));

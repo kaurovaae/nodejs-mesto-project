@@ -4,6 +4,7 @@ import Card from '../models/card';
 import { STATUS_CODE } from '../consts';
 import NotFoundError from '../errors/not-found-err';
 import BadRequestError from '../errors/bad-request-err';
+import ForbiddenError from '../errors/forbidden-err';
 
 export const getCards = async (_req: Request, res: Response, next: NextFunction): Promise<any> => {
   try {
@@ -19,9 +20,13 @@ export const deleteCard = async (req: Request, res: Response, next: NextFunction
     const { cardId } = req.params;
 
     const userId = req.user?._id;
-    await Card
-      .findOneAndDelete({ $and: [{ owner: userId }, { _id: cardId }] })
+    const card = await Card
+      .findById(cardId)
       .orFail(() => new NotFoundError('Запрашиваемая карточка не найдена'));
+
+    if (card.owner !== userId) {
+      return next(new ForbiddenError('Запрашиваемая карточка не найдена'));
+    }
 
     return res.send({ data: { message: 'Карточка успешно удалена' } });
   } catch (err) {
