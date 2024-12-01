@@ -15,8 +15,8 @@ interface IUserMethods {}
 
 interface IUserModel extends mongoose.Model<IUser, {}, IUserMethods> {
   findUserByCredentials: (
-    email: string,
-    password: string
+    _email: string,
+    _password: string
   ) => Promise<mongoose.HydratedDocument<IUser, IUserMethods>>,
 }
 

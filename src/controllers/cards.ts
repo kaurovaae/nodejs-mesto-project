@@ -1,91 +1,87 @@
 import { NextFunction, Request, Response } from 'express';
+import { Error as MongooseError } from 'mongoose';
 import Card from '../models/card';
 import NotFoundError from '../errors/not-found-err';
 import BadRequestError from '../errors/bad-request-err';
 
-export const getCards = (req: Request, res: Response, next: NextFunction) => {
-  Card.find({})
-    .then((users) => res.send({ data: users }))
-    .catch(next);
+export const getCards = async (_req: Request, res: Response, next: NextFunction) => {
+  try {
+    const cards = await Card.find({});
+    return res.send({ data: cards });
+  } catch (err) {
+    return next(err);
+  }
 };
 
-export const deleteCard = (req: Request, res: Response, next: NextFunction) => {
-  const { cardId } = req.params;
+export const deleteCard = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { cardId } = req.params;
 
-  Card.findByIdAndDelete({ _id: cardId })
-    .then((card) => {
-      if (!card) {
-        throw new NotFoundError('Запрашиваемая карточка не найдена');
-      }
+    await Card
+      .findByIdAndDelete({ _id: cardId })
+      .orFail(() => new NotFoundError('Запрашиваемая карточка не найдена'));
 
-      res.send({ data: { message: 'Карточка успешно удалена' } });
-    })
-    .catch(next);
+    return res.send({ data: { message: 'Карточка успешно удалена' } });
+  } catch (err) {
+    return next(err);
+  }
 };
 
-export const createCard = (req: Request, res: Response, next: NextFunction) => {
-  const { name, link } = req.body;
+export const createCard = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { name, link } = req.body;
 
-  // @ts-ignore
-  const userId = req.user._id;
+    // @ts-ignore
+    const userId = req.user._id;
+    const card = await Card.create({ name, link, owner: userId });
 
-  Card.create({ name, link, owner: userId })
-    .then((card) => res.status(201).send({ data: card }))
-    .catch((err) => {
-      if (err.name === 'ValidationError') {
-        next(new BadRequestError('Переданы некорректные данные при создании карточки'));
-      } else {
-        next(err);
-      }
-    });
+    return res.status(201).send({ data: card });
+  } catch (err) {
+    if (err instanceof MongooseError.ValidatorError) {
+      return next(new BadRequestError('Переданы некорректные данные при создании карточки'));
+    }
+    return next(err);
+  }
 };
 
-export const likeCard = (req: Request, res: Response, next: NextFunction) => {
-  // @ts-ignore
-  const userId = req.user._id;
+export const likeCard = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    // @ts-ignore
+    const userId = req.user._id;
+    const card = await Card
+      .findByIdAndUpdate(
+        req.params.cardId,
+        { $addToSet: { likes: userId } }, // добавить _id в массив, если его там нет
+        { new: true },
+      )
+      .orFail(() => new NotFoundError('Запрашиваемая карточка не найдена'));
 
-  Card.findByIdAndUpdate(
-    req.params.cardId,
-    { $addToSet: { likes: userId } }, // добавить _id в массив, если его там нет
-    { new: true },
-  )
-    .then((card) => {
-      if (!card) {
-        throw new NotFoundError('Запрашиваемая карточка не найдена');
-      }
-
-      res.send({ data: card });
-    })
-    .catch((err) => {
-      if (err.name === 'ValidationError') {
-        next(new BadRequestError('Переданы некорректные данные для постановки лайка'));
-      } else {
-        next(err);
-      }
-    });
+    return res.send({ data: card });
+  } catch (err) {
+    if (err instanceof MongooseError.ValidatorError) {
+      return next(new BadRequestError('Переданы некорректные данные для постановки лайка'));
+    }
+    return next(err);
+  }
 };
 
-export const dislikeCard = (req: Request, res: Response, next: NextFunction) => {
-  // @ts-ignore
-  const userId = req.user._id;
+export const dislikeCard = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    // @ts-ignore
+    const userId = req.user._id;
+    const card = await Card
+      .findByIdAndUpdate(
+        req.params.cardId,
+        { $pull: { likes: userId } }, // убрать _id из массива
+        { new: true },
+      )
+      .orFail(() => new NotFoundError('Запрашиваемая карточка не найдена'));
 
-  Card.findByIdAndUpdate(
-    req.params.cardId,
-    { $pull: { likes: userId } }, // убрать _id из массива
-    { new: true },
-  )
-    .then((card) => {
-      if (!card) {
-        throw new NotFoundError('Запрашиваемая карточка не найдена');
-      }
-
-      res.send({ data: card });
-    })
-    .catch((err) => {
-      if (err.name === 'ValidationError') {
-        next(new BadRequestError('Переданы некорректные данные для снятия лайка'));
-      } else {
-        next(err);
-      }
-    });
+    return res.send({ data: card });
+  } catch (err) {
+    if (err instanceof MongooseError.ValidatorError) {
+      return next(new BadRequestError('Переданы некорректные данные для снятия лайка'));
+    }
+    return next(err);
+  }
 };

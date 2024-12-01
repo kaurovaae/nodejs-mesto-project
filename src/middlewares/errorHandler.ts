@@ -1,11 +1,15 @@
-import { Request, Response, NextFunction } from 'express';
+import {
+  Request,
+  Response,
+  NextFunction,
+  ErrorRequestHandler,
+} from 'express';
 
-const errorHandler = (
+const errorHandler: ErrorRequestHandler = (
   err: Error & { statusCode: number },
-  req: Request,
+  _req: Request,
   res: Response,
-  // eslint-disable-next-line no-unused-vars
-  next: NextFunction,
+  _next: NextFunction,
 ) => {
   const { statusCode = 500, message } = err;
 
