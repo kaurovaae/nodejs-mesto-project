@@ -1,4 +1,4 @@
-export const AUTH_SALT = 'b5df3d7d692df71211be07ec8d1c12de26668b2dfe6fed3740357865cbdf8ecf';
+export const DEV_JWT_SECRET = '86bb7028ae91467567ddcd65291a36f28be6bf87713e940a3bb8892c259f4c79';
 
 export const STATUS_CODE = {
   ERROR: 500,

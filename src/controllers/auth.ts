@@ -3,15 +3,19 @@ import jwt from 'jsonwebtoken';
 import { NextFunction, Request, Response } from 'express';
 import { Error as MongooseError } from 'mongoose';
 import User from '../models/user';
-import { AUTH_SALT, STATUS_CODE } from '../consts';
+import { STATUS_CODE, DEV_JWT_SECRET } from '../consts';
 import BadRequestError from '../errors/bad-request-err';
 
 export const login = async (req: Request, res: Response, next: NextFunction) => {
-  const { email, password } = req.body;
-
   try {
+    const { NODE_ENV, JWT_SECRET } = process.env;
+    const { email, password } = req.body;
+
     const user = await User.findUserByCredentials(email, password);
-    const token = jwt.sign({ _id: user._id }, AUTH_SALT);
+    const token = jwt.sign(
+      { _id: user._id },
+      NODE_ENV === 'production' ? JWT_SECRET as string : DEV_JWT_SECRET,
+    );
     return res
       .cookie('jwt', token, {
         maxAge: 3600000,

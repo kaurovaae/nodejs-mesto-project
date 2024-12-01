@@ -1,10 +1,11 @@
 import jwt from 'jsonwebtoken';
-import { AUTH_SALT } from '../consts';
+import { DEV_JWT_SECRET } from '../consts';
 import { Request, Response, NextFunction } from '../Model/Express';
 import IUser from '../Model/IUser';
 import UnauthorizedError from '../errors/unauthorized-err';
 
 const authMiddleware = async (req: Request, _res: Response, next: NextFunction) => {
+  const { NODE_ENV, JWT_SECRET } = process.env;
   const { authorization } = req.headers;
 
   if (!authorization || !authorization.startsWith('Bearer ')) {
@@ -15,7 +16,10 @@ const authMiddleware = async (req: Request, _res: Response, next: NextFunction) 
   let payload;
 
   try {
-    payload = jwt.verify(token, AUTH_SALT);
+    payload = jwt.verify(
+      token,
+      NODE_ENV === 'production' ? JWT_SECRET as string : DEV_JWT_SECRET,
+    );
   } catch (err) {
     return next(new UnauthorizedError('Необходима авторизация'));
   }
