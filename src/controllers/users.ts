@@ -4,7 +4,7 @@ import User from '../models/user';
 import NotFoundError from '../errors/not-found-err';
 import BadRequestError from '../errors/bad-request-err';
 
-export const getUsers = async (_req: Request, res: Response, next: NextFunction) => {
+export const getUsers = async (_req: Request, res: Response, next: NextFunction): Promise<any> => {
   try {
     const users = await User.find({});
     return res.send({ data: users });
@@ -13,7 +13,7 @@ export const getUsers = async (_req: Request, res: Response, next: NextFunction)
   }
 };
 
-export const getUser = async (req: Request, res: Response, next: NextFunction) => {
+export const getUser = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
   try {
     const { userId } = req.params;
     const user = await User
@@ -26,7 +26,11 @@ export const getUser = async (req: Request, res: Response, next: NextFunction) =
   }
 };
 
-export const getUserInfo = async (req: Request, res: Response, next: NextFunction) => {
+export const getUserInfo = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): Promise<any> => {
   try {
     const userId = req.user?._id;
     const user = await User
@@ -39,7 +43,7 @@ export const getUserInfo = async (req: Request, res: Response, next: NextFunctio
   }
 };
 
-export const updateUser = async (req: Request, res: Response, next: NextFunction) => {
+export const updateUser = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
   try {
     const { name, about, avatar } = req.body;
 
@@ -61,7 +65,11 @@ export const updateUser = async (req: Request, res: Response, next: NextFunction
   }
 };
 
-export const updateUserAvatar = async (req: Request, res: Response, next: NextFunction) => {
+export const updateUserAvatar = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): Promise<any> => {
   try {
     const { avatar } = req.body;
 

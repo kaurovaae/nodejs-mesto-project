@@ -5,7 +5,7 @@ import { STATUS_CODE } from '../consts';
 import NotFoundError from '../errors/not-found-err';
 import BadRequestError from '../errors/bad-request-err';
 
-export const getCards = async (_req: Request, res: Response, next: NextFunction) => {
+export const getCards = async (_req: Request, res: Response, next: NextFunction): Promise<any> => {
   try {
     const cards = await Card.find({});
     return res.send({ data: cards });
@@ -14,7 +14,7 @@ export const getCards = async (_req: Request, res: Response, next: NextFunction)
   }
 };
 
-export const deleteCard = async (req: Request, res: Response, next: NextFunction) => {
+export const deleteCard = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
   try {
     const { cardId } = req.params;
 
@@ -29,7 +29,7 @@ export const deleteCard = async (req: Request, res: Response, next: NextFunction
   }
 };
 
-export const createCard = async (req: Request, res: Response, next: NextFunction) => {
+export const createCard = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
   try {
     const { name, link } = req.body;
 
@@ -45,7 +45,7 @@ export const createCard = async (req: Request, res: Response, next: NextFunction
   }
 };
 
-export const likeCard = async (req: Request, res: Response, next: NextFunction) => {
+export const likeCard = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
   try {
     const userId = req.user?._id;
     const card = await Card
@@ -65,7 +65,11 @@ export const likeCard = async (req: Request, res: Response, next: NextFunction) 
   }
 };
 
-export const dislikeCard = async (req: Request, res: Response, next: NextFunction) => {
+export const dislikeCard = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): Promise<any> => {
   try {
     const userId = req.user?._id;
     const card = await Card

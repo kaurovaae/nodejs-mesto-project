@@ -6,7 +6,7 @@ import User from '../models/user';
 import { STATUS_CODE, DEV_JWT_SECRET } from '../consts';
 import BadRequestError from '../errors/bad-request-err';
 
-export const login = async (req: Request, res: Response, next: NextFunction) => {
+export const login = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
   try {
     const { NODE_ENV, JWT_SECRET } = process.env;
     const { email, password } = req.body;
@@ -28,7 +28,7 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
   }
 };
 
-export const createUser = async (req: Request, res: Response, next: NextFunction) => {
+export const createUser = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
   try {
     const {
       name,
