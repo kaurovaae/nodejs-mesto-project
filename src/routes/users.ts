@@ -1,6 +1,5 @@
 import { Router } from 'express';
 import {
-  createUser,
   getUsers,
   getUser,
   updateUser,
@@ -17,7 +16,5 @@ usersRouter.patch('/me', updateUser); // обновить профиль
 usersRouter.get('/:userId', getUser); // вернуть пользователя по _id
 // @ts-ignore
 usersRouter.get('/', getUsers); // вернуть всех пользователей
-// @ts-ignore
-usersRouter.post('/', createUser); // создать пользователя
 
 export default usersRouter;
