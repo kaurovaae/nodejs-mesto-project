@@ -6,15 +6,13 @@ import UnauthorizedError from '../errors/unauthorized-err';
 
 const authMiddleware = async (req: Request, _res: Response, next: NextFunction) => {
   const { NODE_ENV, JWT_SECRET } = process.env;
-  const { authorization } = req.headers;
+  const { jwt: token } = req.cookies;
 
-  if (!authorization || !authorization.startsWith('Bearer ')) {
+  if (!token) {
     return next(new UnauthorizedError('Необходима авторизация'));
   }
 
-  const token = authorization.replace('Bearer ', '');
   let payload;
-
   try {
     payload = jwt.verify(
       token,
