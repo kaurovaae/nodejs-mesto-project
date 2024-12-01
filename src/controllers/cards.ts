@@ -18,8 +18,9 @@ export const deleteCard = async (req: Request, res: Response, next: NextFunction
   try {
     const { cardId } = req.params;
 
+    const userId = req.user?._id;
     await Card
-      .findByIdAndDelete({ _id: cardId })
+      .findOneAndDelete({ $and: [{ owner: userId }, { _id: cardId }] })
       .orFail(() => new NotFoundError('Запрашиваемая карточка не найдена'));
 
     return res.send({ data: { message: 'Карточка успешно удалена' } });
