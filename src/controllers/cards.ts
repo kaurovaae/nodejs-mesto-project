@@ -1,5 +1,5 @@
-import { NextFunction, Request, Response } from 'express';
 import { Error as MongooseError } from 'mongoose';
+import { NextFunction, Request, Response } from '../Model/Express';
 import Card from '../models/card';
 import { STATUS_CODE } from '../consts';
 import NotFoundError from '../errors/not-found-err';
@@ -32,8 +32,7 @@ export const createCard = async (req: Request, res: Response, next: NextFunction
   try {
     const { name, link } = req.body;
 
-    // @ts-ignore
-    const userId = req.user._id;
+    const userId = req.user?._id;
     const card = await Card.create({ name, link, owner: userId });
 
     return res.status(STATUS_CODE.CREATED).send({ data: card });
@@ -47,8 +46,7 @@ export const createCard = async (req: Request, res: Response, next: NextFunction
 
 export const likeCard = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    // @ts-ignore
-    const userId = req.user._id;
+    const userId = req.user?._id;
     const card = await Card
       .findByIdAndUpdate(
         req.params.cardId,
@@ -68,8 +66,7 @@ export const likeCard = async (req: Request, res: Response, next: NextFunction) 
 
 export const dislikeCard = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    // @ts-ignore
-    const userId = req.user._id;
+    const userId = req.user?._id;
     const card = await Card
       .findByIdAndUpdate(
         req.params.cardId,

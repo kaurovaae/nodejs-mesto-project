@@ -1,7 +1,8 @@
 import jwt from 'jsonwebtoken';
-import { Request, Response, NextFunction } from 'express';
-import UnauthorizedError from '../errors/unauthorized-err';
 import { AUTH_SALT } from '../consts';
+import { Request, Response, NextFunction } from '../Model/Express';
+import IUser from '../Model/IUser';
+import UnauthorizedError from '../errors/unauthorized-err';
 
 const authMiddleware = async (req: Request, _res: Response, next: NextFunction) => {
   const { authorization } = req.headers;
@@ -19,8 +20,7 @@ const authMiddleware = async (req: Request, _res: Response, next: NextFunction) 
     return next(new UnauthorizedError('Необходима авторизация'));
   }
 
-  // @ts-ignore
-  req.user = payload;
+  req.user = payload as IUser;
 
   return next();
 };

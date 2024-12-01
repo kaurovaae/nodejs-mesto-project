@@ -2,14 +2,7 @@ import bcrypt from 'bcryptjs';
 import mongoose from 'mongoose';
 import validator from 'validator';
 import UnauthorizedError from '../errors/unauthorized-err';
-
-interface IUser {
-  name: string;
-  about: string;
-  avatar: string;
-  email: string;
-  password: string;
-}
+import IUser from '../Model/IUser';
 
 interface IUserMethods {}
 

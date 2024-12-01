@@ -1,5 +1,5 @@
-import { NextFunction, Request, Response } from 'express';
 import { Error as MongooseError } from 'mongoose';
+import { NextFunction, Request, Response } from '../Model/Express';
 import User from '../models/user';
 import NotFoundError from '../errors/not-found-err';
 import BadRequestError from '../errors/bad-request-err';
@@ -28,8 +28,7 @@ export const getUser = async (req: Request, res: Response, next: NextFunction) =
 
 export const getUserInfo = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    // @ts-ignore
-    const userId = req.user._id;
+    const userId = req.user?._id;
     const user = await User
       .findById(userId)
       .orFail(() => new NotFoundError('Запрашиваемый пользователь не найден'));
@@ -44,8 +43,7 @@ export const updateUser = async (req: Request, res: Response, next: NextFunction
   try {
     const { name, about, avatar } = req.body;
 
-    // @ts-ignore
-    const userId = req.user._id;
+    const userId = req.user?._id;
     const user = await User
       .findByIdAndUpdate(
         userId,
@@ -67,8 +65,7 @@ export const updateUserAvatar = async (req: Request, res: Response, next: NextFu
   try {
     const { avatar } = req.body;
 
-    // @ts-ignore
-    const userId = req.user._id;
+    const userId = req.user?._id;
     const user = await User
       .findByIdAndUpdate(
         userId,
