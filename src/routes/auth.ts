@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { Joi, celebrate } from 'celebrate';
 import { login, createUser } from '../controllers/auth';
+import { LINK_REGEX } from '../consts';
 
 const authRouter = Router();
 
@@ -17,7 +18,7 @@ authRouter.post('/signup', celebrate({
   body: Joi.object().keys({
     name: Joi.string().min(2).max(30),
     about: Joi.string().min(2).max(200),
-    avatar: Joi.string(),
+    avatar: Joi.string().regex(LINK_REGEX),
     email: Joi.string().required(),
     password: Joi.string().required(),
   }),

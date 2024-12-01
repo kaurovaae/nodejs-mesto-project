@@ -7,13 +7,14 @@ import {
   updateUser,
   updateUserAvatar,
 } from '../controllers/users';
+import { LINK_REGEX } from '../consts';
 
 const usersRouter = Router();
 
 // обновить аватар
 usersRouter.patch('/me/avatar', celebrate({
   body: Joi.object().keys({
-    avatar: Joi.string().required(),
+    avatar: Joi.string().required().regex(LINK_REGEX),
   }),
 }), updateUserAvatar);
 
@@ -22,7 +23,7 @@ usersRouter.patch('/me', celebrate({
   body: Joi.object().keys({
     name: Joi.string().min(2).max(30),
     about: Joi.string().min(2).max(200),
-    avatar: Joi.string(),
+    avatar: Joi.string().regex(LINK_REGEX),
   }),
 }), updateUser);
 
@@ -30,7 +31,11 @@ usersRouter.patch('/me', celebrate({
 usersRouter.get('/me', getUserInfo);
 
 // вернуть пользователя по _id
-usersRouter.get('/:userId', getUser);
+usersRouter.get('/:userId', celebrate({
+  params: Joi.object().keys({
+    userId: Joi.string().alphanum().length(24),
+  }),
+}), getUser);
 
 // вернуть всех пользователей
 usersRouter.get('/', getUsers);
