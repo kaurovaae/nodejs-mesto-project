@@ -16,6 +16,7 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
       .cookie('jwt', token, {
         maxAge: 3600000,
         httpOnly: true,
+        sameSite: true,
       })
       .end();
   } catch (err) {

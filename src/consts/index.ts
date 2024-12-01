@@ -1,4 +1,4 @@
-export const AUTH_SALT = '912c3782f50492ddcb2b9d33191';
+export const AUTH_SALT = 'b5df3d7d692df71211be07ec8d1c12de26668b2dfe6fed3740357865cbdf8ecf';
 
 export const STATUS_CODE = {
   ERROR: 500,
