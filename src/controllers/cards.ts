@@ -25,7 +25,7 @@ export const deleteCard = async (req: Request, res: Response, next: NextFunction
       .orFail(() => new NotFoundError('Запрашиваемая карточка не найдена'));
 
     if (card.owner.toString() !== userId) {
-      return next(new ForbiddenError('Запрашиваемая карточка не найдена'));
+      return next(new ForbiddenError('Операция запрещена'));
     }
 
     await card.deleteOne();
