@@ -12,12 +12,12 @@ const errorHandler: ErrorRequestHandler = (
   res: Response,
   _next: NextFunction,
 ) => {
-  const { statusCode = STATUS_CODE.ERROR, message } = err;
+  const { statusCode = STATUS_CODE.INTERNAL_ERROR, message } = err;
 
   res
     .status(statusCode)
     .send({
-      message: statusCode === STATUS_CODE.ERROR
+      message: statusCode === STATUS_CODE.INTERNAL_ERROR
         ? 'Произошла ошибка'
         : message,
     });
