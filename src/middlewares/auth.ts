@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import { DEV_JWT_SECRET } from '../consts';
 import { Request, Response, NextFunction } from '../Model/Express';
-import IUser from '../Model/IUser';
+import JwtPayload from '../Model/JwtPayload';
 import UnauthorizedError from '../errors/unauthorized-err';
 
 const authMiddleware = async (req: Request, _res: Response, next: NextFunction) => {
@@ -24,7 +24,7 @@ const authMiddleware = async (req: Request, _res: Response, next: NextFunction) 
     return next(new UnauthorizedError('Необходима авторизация'));
   }
 
-  req.user = payload as IUser;
+  req.user = payload as JwtPayload;
 
   return next();
 };

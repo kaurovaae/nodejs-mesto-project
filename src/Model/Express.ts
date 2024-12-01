@@ -1,8 +1,8 @@
 import { Request as ERequest } from 'express';
-import IUser from './IUser';
+import JwtPayload from './JwtPayload';
 
 export type Request = {
-  user?: IUser;
+  user?: JwtPayload;
 } & ERequest;
 
 export { NextFunction, Response } from 'express';
