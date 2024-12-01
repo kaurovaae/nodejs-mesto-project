@@ -4,6 +4,7 @@ import mongoose from 'mongoose';
 import cookieParser from 'cookie-parser';
 import routes from './routes';
 import errorHandler from './middlewares/errorHandler';
+import { requestLogger, errorLogger } from './middlewares/logger';
 
 dotenv.config();
 
@@ -17,7 +18,10 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
+app.use(requestLogger);
 app.use(routes);
+app.use(errorLogger);
+
 app.use(errorHandler);
 
 app.listen(PORT, () => {
