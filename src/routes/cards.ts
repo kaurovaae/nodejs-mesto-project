@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import { Joi, celebrate } from 'celebrate';
 import {
   createCard,
   getCards,
@@ -9,10 +10,24 @@ import {
 
 const cardsRouter = Router();
 
-cardsRouter.put('/:cardId/likes', likeCard); // поставить лайк карточке
-cardsRouter.delete('/:cardId/likes', dislikeCard); // убрать лайк с карточки
-cardsRouter.delete('/:cardId', deleteCard); // удалить карточку по идентификатору
-cardsRouter.get('/', getCards); // вернуть все карточки
-cardsRouter.post('/', createCard); // создать карточку
+// поставить лайк карточке
+cardsRouter.put('/:cardId/likes', likeCard);
+
+// убрать лайк с карточки
+cardsRouter.delete('/:cardId/likes', dislikeCard);
+
+// удалить карточку по идентификатору
+cardsRouter.delete('/:cardId', deleteCard);
+
+// вернуть все карточки
+cardsRouter.get('/', getCards);
+
+// создать карточку
+cardsRouter.post('/', celebrate({
+  body: Joi.object().keys({
+    name: Joi.string().required().min(2).max(30),
+    link: Joi.string().required(),
+  }),
+}), createCard);
 
 export default cardsRouter;

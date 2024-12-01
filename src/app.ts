@@ -1,4 +1,5 @@
 import express from 'express';
+import { errors } from 'celebrate';
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import cookieParser from 'cookie-parser';
@@ -22,6 +23,7 @@ app.use(requestLogger);
 app.use(routes);
 app.use(errorLogger);
 
+app.use(errors());
 app.use(errorHandler);
 
 app.listen(PORT, () => {
