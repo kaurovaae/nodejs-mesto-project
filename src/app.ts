@@ -1,6 +1,7 @@
 import express from 'express';
 import rateLimit from 'express-rate-limit';
 import { errors } from 'celebrate';
+import cors from 'cors';
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import cookieParser from 'cookie-parser';
@@ -10,9 +11,16 @@ import { requestLogger, errorLogger } from './middlewares/logger';
 
 dotenv.config();
 
-const { PORT = 3000 } = process.env;
+const { PORT = 3001 } = process.env;
 
 const app = express();
+
+// enabling CORS for some specific origins only.
+const corsOptions = {
+  origin: ['http://localhost:3000'],
+};
+
+app.use(cors(corsOptions));
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // за 15 минут
