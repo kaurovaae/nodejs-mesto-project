@@ -17,7 +17,7 @@ const app = express();
 
 // enabling CORS for some specific origins only.
 const corsOptions = {
-  origin: ['http://annie.dev.nomorepartiesco.ru'],
+  origin: ['http://api.annie.dev.nomorepartiesco.ru'],
   // origin: ['http://localhost:3000'],
 };
 
