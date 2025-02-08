@@ -15,13 +15,7 @@ const { PORT = 3001 } = process.env;
 
 const app = express();
 
-// enabling CORS for some specific origins only.
-const corsOptions = {
-  origin: ['http://annie.dev.nomorepartiesco.ru'],
-  // origin: ['http://localhost:3000'],
-};
-
-app.use(cors(corsOptions));
+app.use(cors());
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // за 15 минут
