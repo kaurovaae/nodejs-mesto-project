@@ -17,8 +17,6 @@ const app = express();
 
 app.use(cors());
 
-console.log('[server] here');
-
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // за 15 минут
   max: 100, // можно совершить максимум 100 запросов с одного IP
@@ -26,7 +24,7 @@ const limiter = rateLimit({
 
 app.use(limiter);
 
-mongoose.connect('mongodb://localhost:27017/mestodb');
+mongoose.connect('mongodb://127.0.0.1:27017/mestodb');
 
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }));
