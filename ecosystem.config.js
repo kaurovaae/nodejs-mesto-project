@@ -1,10 +1,11 @@
-require('dotenv').config();
+require('dotenv').config({ path: './production.env' });
 
 const {
   DEPLOY_USER,
   DEPLOY_HOST,
   DEPLOY_PATH,
-  DEPLOY_REF = 'origin/main',
+  DEPLOY_REF,
+  DEPLOY_REPOSITORY,
   JWT_SECRET,
 } = process.env;
 
@@ -24,10 +25,10 @@ module.exports = {
       user: DEPLOY_USER,
       host: DEPLOY_HOST,
       ref: DEPLOY_REF,
-      repo: 'https://github.com/kaurovaae/nodejs-mesto-project.git',
+      repo: DEPLOY_REPOSITORY,
       path: DEPLOY_PATH,
-      'pre-deploy-local': `scp ./.env ${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH}`,
-      'post-deploy': 'npm i && npm run build && pm2 startOrRestart ecosystem.config.js',
+      'pre-deploy-local': `bash scripts/deployEnv.sh ${DEPLOY_USER}@${DEPLOY_HOST} ${DEPLOY_PATH}`,
+      'post-deploy': 'pwd && npm ci && npm run build && pm2 startOrRestart ecosystem.config.js --env production',
     },
   },
 };
