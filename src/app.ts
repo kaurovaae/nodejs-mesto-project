@@ -11,7 +11,7 @@ import { requestLogger, errorLogger } from './middlewares/logger';
 
 dotenv.config();
 
-const { PORT = 3001 } = process.env;
+const { PORT = 3000, DB_ADDRESS } = process.env;
 
 const app = express();
 
@@ -24,7 +24,7 @@ const limiter = rateLimit({
 
 app.use(limiter);
 
-mongoose.connect('mongodb://127.0.0.1:27017/mestodb');
+mongoose.connect(DB_ADDRESS);
 
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }));

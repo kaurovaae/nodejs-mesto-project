@@ -1,5 +1,3 @@
-export const DEV_JWT_SECRET = '86bb7028ae91467567ddcd65291a36f28be6bf87713e940a3bb8892c259f4c79';
-
 export const STATUS_CODE = {
   OK: 200,
   CREATED: 201,

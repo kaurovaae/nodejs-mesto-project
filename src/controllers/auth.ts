@@ -3,19 +3,19 @@ import jwt from 'jsonwebtoken';
 import { NextFunction, Request, Response } from 'express';
 import { Error as MongooseError } from 'mongoose';
 import User from '../models/user';
-import { STATUS_CODE, DEV_JWT_SECRET, ALREADY_EXISTS_CODE } from '../consts';
+import { STATUS_CODE, ALREADY_EXISTS_CODE } from '../consts';
 import BadRequestError from '../errors/bad-request-err';
 import ConflictError from '../errors/conflict-err';
 
 export const login = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
   try {
-    const { NODE_ENV, JWT_SECRET } = process.env;
+    const { JWT_SECRET } = process.env;
     const { email, password } = req.body;
 
     const user = await User.findUserByCredentials(email, password);
     const token = jwt.sign(
       { _id: user._id },
-      NODE_ENV === 'production' ? JWT_SECRET as string : DEV_JWT_SECRET,
+      JWT_SECRET,
     );
     return res
       .cookie('jwt', token, {
