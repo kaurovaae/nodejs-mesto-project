@@ -6,17 +6,12 @@ const {
   DEPLOY_PATH,
   DEPLOY_REF,
   DEPLOY_REPOSITORY,
-  JWT_SECRET,
 } = process.env;
 
 module.exports = {
   apps: [{
     name: 'mesto',
     script: './dist/app.js',
-    env_production: {
-      NODE_ENV: 'production',
-      JWT_SECRET,
-    },
   }],
 
   // Настройка деплоя
