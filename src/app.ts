@@ -24,7 +24,7 @@ const limiter = rateLimit({
 
 app.use(limiter);
 
-mongoose.connect(DB_ADDRESS);
+mongoose.connect(DB_ADDRESS as string);
 
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }));
