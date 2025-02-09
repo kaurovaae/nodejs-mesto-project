@@ -4,7 +4,7 @@ import JwtPayload from '../Model/JwtPayload';
 import UnauthorizedError from '../errors/unauthorized-err';
 
 const authMiddleware = async (req: Request, _res: Response, next: NextFunction) => {
-  const { JWT_SECRET } = process.env;
+  const { JWT_SECRET = '' } = process.env;
   const { jwt: token } = req.cookies;
 
   if (!token) {
@@ -15,7 +15,7 @@ const authMiddleware = async (req: Request, _res: Response, next: NextFunction) 
   try {
     payload = jwt.verify(
       token,
-      JWT_SECRET as string,
+      JWT_SECRET,
     );
   } catch (err) {
     return next(new UnauthorizedError('Необходима авторизация'));
