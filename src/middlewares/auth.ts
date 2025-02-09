@@ -15,7 +15,7 @@ const authMiddleware = async (req: Request, _res: Response, next: NextFunction) 
   try {
     payload = jwt.verify(
       token,
-      JWT_SECRET,
+      JWT_SECRET as string,
     );
   } catch (err) {
     return next(new UnauthorizedError('Необходима авторизация'));

@@ -15,7 +15,7 @@ export const login = async (req: Request, res: Response, next: NextFunction): Pr
     const user = await User.findUserByCredentials(email, password);
     const token = jwt.sign(
       { _id: user._id },
-      JWT_SECRET,
+      JWT_SECRET as string,
     );
     return res
       .cookie('jwt', token, {
