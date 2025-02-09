@@ -1,4 +1,4 @@
-require('dotenv').config({ path: './production.env' });
+require('dotenv').config({ path: './.env.deploy' });
 
 const {
   DEPLOY_USER,
